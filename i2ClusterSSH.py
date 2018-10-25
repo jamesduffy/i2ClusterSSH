@@ -32,8 +32,7 @@ def cli(command, region, tag, use_public_ip, no_prompt):
     ec2_resource = boto3.resource('ec2', region_name=region)
 
     if len(tag) == 0:
-        click.echo("You have not specified any tags to filter by. This may cause a large number of instances to be returned.")
-        if no_prompt is False and click.confirm("  Do you wish to continue?") is False:
+        if no_prompt is False and click.confirm("You have not specified any tags to filter by. This may cause a large number of instances to be returned.\n  Do you wish to continue?") is False:
             sys.exit("Quitting before the going gets tough.")
 
     # Build filters list
@@ -57,10 +56,12 @@ def cli(command, region, tag, use_public_ip, no_prompt):
 
     # Display a warning if we are trying to connect to many instances
     if len(ip_addresses) >= WARNING_INSTNACE_COUNT:
-        click.echo("You are attempting to connect to {} instances and this may cause performance issues.".format(len(ip_addresses)))
-        if no_prompt is False and click.confirm("  Do you wish to continue?") is False:
+        if no_prompt is False and click.confirm("You are attempting to connect to {} instances and this may cause performance issues.\n  Do you wish to continue?".format(len(ip_addresses))) is False:
             sys.exit("Quitting before the going gets tough.")
+    elif len(ip_addresses) == 0:
+        sys.exit("No machines returned.")
 
+    # Build the string of IP addresses
     address_string = ''
     for address in ip_addresses:
         address_string += '{} '.format(address)
