@@ -18,11 +18,12 @@ def get_valid_aws_regions():
 
 
 @click.command()
+@click.option('--command', '-c', default="i2cssh -m")
 @click.option('--region', '-r', help="AWS Region")
 @click.option('--tag', '-t', multiple=True)
 @click.option('--use-public-ip', '-p', is_flag=True, default=False, help="Use public IPs")
 @click.option('--no-prompt', is_flag=True, default=False, help="Suppress any prompts when using a non interactive shell.")
-def cli(region, tag, use_public_ip, no_prompt):
+def cli(command, region, tag, use_public_ip, no_prompt):
     """Get a list of AWS Instances by tags and SSH to them in iTerm2."""
     if region not in get_valid_aws_regions():
         click.echo("Region {} is not valid!".format(region))
@@ -65,7 +66,7 @@ def cli(region, tag, use_public_ip, no_prompt):
         address_string += '{} '.format(address)
     address_string.strip()
 
-    click.echo("i2cssh -m {}".format(address_string))
+    click.echo("{} {}".format(command, address_string))
 
 
 if __name__ == '__main__':
