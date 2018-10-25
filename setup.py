@@ -1,4 +1,4 @@
-"""Build the i2ClusterSSG package."""
+"""Build the i2ClusterSSH package."""
 from setuptools import setup, find_packages
 import os
 
